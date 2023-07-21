@@ -24,7 +24,7 @@ if __name__ == "__main__":
     write_text = write_text or write_both
     write_epub = write_epub or write_both
 
-    do_login = do_login.strip() == "y"
+    do_login = do_login.strip() == "y" or do_login.strip() == "yes"
 
     text_content, epub_content = scraper.scrape_chapters(url, chapter_count, do_login)
 

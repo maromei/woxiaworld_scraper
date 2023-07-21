@@ -47,6 +47,9 @@ def get_style_dict(style: str) -> dict:
         "font-style": "normal",
     }
 
+    if style is None:
+        return style_dict
+
     style_list = style.split(";")
     for style_elem in style_list:
 
@@ -61,6 +64,7 @@ def parse_span(span: WebElement) -> dict[str, str]:
     text = span.text
 
     style = span.get_dom_attribute("style")
+
     style_dict = get_style_dict(style)
 
     span_info = {
