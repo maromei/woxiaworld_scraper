@@ -16,7 +16,10 @@ classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "selenium",
+  "beautifulsoup4"
+]
 dynamic = ["version"]
 
 [project.urls]
@@ -25,7 +28,7 @@ Issues = "https://github.com/maromei/woxiaworld_scraper/issues"
 Source = "https://github.com/maromei/woxiaworld_scraper"
 
 [tool.hatch.version]
-path = "src/__about__.py"
+path = "src/wuxiaworld_scraper/__about__.py"
 
 #######################
 ### COVERAGE CONFIG ###
