@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "woxiaworld_scraper"
+description = ""
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = []
+authors = [
+  { name = "maromei", email = "maromei@proton.me" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/maromei/woxiaworld_scraper#readme"
+Issues = "https://github.com/maromei/woxiaworld_scraper/issues"
+Source = "https://github.com/maromei/woxiaworld_scraper"
+
+[tool.hatch.version]
+path = "src/__about__.py"
+
+#######################
+### COVERAGE CONFIG ###
+#######################
+
+[tool.coverage.run]
+data_file = "tests/output/coverage/.coverage"
+
+[tool.coverage.html]
+directory = "tests/output/coverage"
+
+#####################
+### ENV - DEFAULT ###
+#####################
+
+[tool.hatch.envs.default]
+
+[tool.hatch.envs.default.scripts]
+
+[tool.hatch.envs.default.env-vars]
+
+##################
+### ENV - TEST ###
+##################
+
+[tool.hatch.envs.tests]
+extra-dependencies = [
+  "pytest-cov"
+]
+
+[tool.hatch.envs.tests.scripts]
+run = [
+  "pytest tests/ --cov-report html --cov-report term --cov-config=pyproject.toml"
+]
+show-cov-html = "firefox tests/output/coverage/index.html"
+
+[tool.hatch.envs.tests.env-vars]
+
+###################
+### ENV - STYLE ###
+###################
+
+[tool.hatch.envs.style]
+skip-install = true
+detached = true
+dependencies = [
+  "pre-commit",
+  "black"
+]
+
+[tool.hatch.envs.style.scripts]
+precommit-install = "pre-commit install"
+
+###################
+### ENV - BUILD ###
+###################
+
+[tool.hatch.envs.build]
+dependencies = [
+  "GitPython",
+  "toml"
+]
+
+[tool.hatch.envs.build.scripts]
+write_version = "python scripts/write_version_to_file.py"
