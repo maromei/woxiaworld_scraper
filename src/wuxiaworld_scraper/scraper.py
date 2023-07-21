@@ -1,5 +1,6 @@
 import time
-from pathlib import Path
+
+import getpass
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -12,8 +13,9 @@ SCRAPING_SLEEP = 2
 
 
 class Scraper:
-    def __init__(self) -> None:
+    def __init__(self, base_url) -> None:
         self.browser = webdriver.Firefox()
+        self.visit(base_url)
 
     def visit(self, url) -> None:
         self.browser.get(url)
@@ -34,6 +36,9 @@ class Scraper:
         text_bdoy = parse_body_to_text(body)
 
         return epub_body, text_bdoy
+
+    def close(self):
+        self.browser.close()
 
 
 def get_style_dict(style: str) -> dict:
@@ -85,7 +90,9 @@ def parse_body_to_text(element: WebElement):
     return content_list
 
 
-def scrape_chapters(starting_url: str, chapter_count: int) -> tuple[dict, dict]:
+def scrape_chapters(
+    starting_url: str, chapter_count: int, wait_for_login: bool
+) -> tuple[dict, dict]:
 
     url_info = navigate.decompose_url(starting_url)
     current_chapter = navigate.get_chapter_from_url(starting_url)
@@ -93,7 +100,11 @@ def scrape_chapters(starting_url: str, chapter_count: int) -> tuple[dict, dict]:
     epub_content = dict()
     text_content = dict()
 
-    scraper = Scraper()
+    scraper = Scraper(url_info.host)
+
+    if wait_for_login:
+        getpass.getpass("press ENTER when you are done logging in.")
+
     for chapter in range(current_chapter, current_chapter + chapter_count):
 
         url = navigate.get_chapter_url(url_info, chapter)
@@ -106,5 +117,7 @@ def scrape_chapters(starting_url: str, chapter_count: int) -> tuple[dict, dict]:
         text_content[chapter] = {"title": title, "body": text_body}
 
         time.sleep(SCRAPING_SLEEP)
+
+    scraper.close()
 
     return text_content, epub_content

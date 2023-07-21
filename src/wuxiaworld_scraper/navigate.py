@@ -10,6 +10,7 @@ from selenium.webdriver.remote.webelement import WebElement
 @dataclass
 class UrlInfo:
 
+    host: str
     base_url: str
     novel_name: str
     chapter_prefix: str
@@ -29,7 +30,11 @@ def decompose_url(url: str) -> UrlInfo:
     if base_url is not None:
         base_url = base_url.group(0)
 
-    url_info = UrlInfo(base_url, novel_name, chapter_prefix)
+    host = re.search(r"^.+\.com", url)
+    if host is not None:
+        host = host.group(0)
+
+    url_info = UrlInfo(host, base_url, novel_name, chapter_prefix)
 
     return url_info
 

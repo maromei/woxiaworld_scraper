@@ -12,7 +12,9 @@ if __name__ == "__main__":
         "Which format should should the output have? "
         "(t) txt, (e) epub, (b) both [default: both]\n"
     )
-    cookie = input("Cookie (leave blank if none should be used):")
+    do_login = input(
+        "Should the scraper wait for you to login? " "(y) yes, (n) no [default no]"
+    )
 
     write_text = output_format == "txt" or output_format == "t"
     write_epub = output_format == "epub" or output_format == "e"
@@ -22,7 +24,9 @@ if __name__ == "__main__":
     write_text = write_text or write_both
     write_epub = write_epub or write_both
 
-    text_content, epub_content = scraper.scrape_chapters(url, chapter_count)
+    do_login = do_login.strip() == "y"
+
+    text_content, epub_content = scraper.scrape_chapters(url, chapter_count, do_login)
 
     url_info = navigate.decompose_url(url)
     base_path = Path(os.getcwd()) / "output"
