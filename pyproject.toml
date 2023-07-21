@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "woxiaworld_scraper"
+name = "wuxiaworld_scraper"
 description = ""
 readme = "README.md"
 requires-python = ">=3.10"
@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
   "selenium",
-  "beautifulsoup4"
+  "pypub3"
 ]
 dynamic = ["version"]
 
@@ -47,6 +47,7 @@ directory = "tests/output/coverage"
 [tool.hatch.envs.default]
 
 [tool.hatch.envs.default.scripts]
+run = "python src/wuxiaworld_scraper"
 
 [tool.hatch.envs.default.env-vars]
 
