@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from wuxiaworld_scraper import navigate, writer
+from wuxiaworld_scraper import navigate
 
 
 SCRAPING_SLEEP = 2
@@ -25,17 +25,15 @@ class Scraper:
         element = self.browser.find_element(By.TAG_NAME, "h4")
         return element.text
 
-    def get_body(self, as_epub: bool) -> str:
+    def get_body(self) -> str:
 
         element = self.browser.find_element(By.CSS_SELECTOR, "div.chapter-content")
         body = element.find_element(By.XPATH, "./*")
 
-        if as_epub:
-            body = body.get_attribute("innerHTML")
-        else:
-            body = parse_body_to_text(body)
+        epub_body = body.get_attribute("innerHTML")
+        text_bdoy = parse_body_to_text(body)
 
-        return body
+        return epub_body, text_bdoy
 
 
 def get_style_dict(style: str) -> dict:
@@ -87,12 +85,13 @@ def parse_body_to_text(element: WebElement):
     return content_list
 
 
-def scrape_chapters(starting_url: str, chapter_count: int, as_epub: bool) -> dict:
+def scrape_chapters(starting_url: str, chapter_count: int) -> tuple[dict, dict]:
 
     url_info = navigate.decompose_url(starting_url)
     current_chapter = navigate.get_chapter_from_url(starting_url)
 
-    content = dict()
+    epub_content = dict()
+    text_content = dict()
 
     scraper = Scraper()
     for chapter in range(current_chapter, current_chapter + chapter_count):
@@ -101,10 +100,11 @@ def scrape_chapters(starting_url: str, chapter_count: int, as_epub: bool) -> dic
         scraper.visit(url)
 
         title = scraper.get_title()
-        body = scraper.get_body(as_epub)
+        epub_body, text_body = scraper.get_body()
 
-        content[chapter] = {"title": title, "body": body}
+        epub_content[chapter] = {"title": title, "body": epub_body}
+        text_content[chapter] = {"title": title, "body": text_body}
 
         time.sleep(SCRAPING_SLEEP)
 
-    return content
+    return text_content, epub_content
