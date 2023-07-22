@@ -9,7 +9,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from wuxiaworld_scraper import navigate
 
 
-SCRAPING_SLEEP = 2
+SCRAPING_SLEEP = 1
 
 
 class Scraper:
@@ -46,6 +46,8 @@ def get_style_dict(style: str) -> dict:
     style_dict = {
         "font-style": "normal",
     }
+
+    return style_dict
 
     if style is None:
         return style_dict
@@ -113,6 +115,8 @@ def scrape_chapters(
 
         url = navigate.get_chapter_url(url_info, chapter)
         scraper.visit(url)
+
+        time.sleep(5)
 
         title = scraper.get_title()
         epub_body, text_body = scraper.get_body()

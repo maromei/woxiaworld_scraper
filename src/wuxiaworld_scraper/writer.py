@@ -50,6 +50,10 @@ def write_epub(title: str, content: dict, out_dir: Path | str):
         epub_name = f"{title}_chapters_{min_chapter_num:04d}"
 
     epub_path = Path(out_dir) / epub_name
+
+    if epub_path.exists():
+        os.remove(epub_path)
+
     epub.create(epub_path)
 
 

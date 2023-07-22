@@ -13,7 +13,7 @@ if __name__ == "__main__":
         "(t) txt, (e) epub, (b) both [default: both]\n"
     )
     do_login = input(
-        "Should the scraper wait for you to login? " "(y) yes, (n) no [default no]"
+        "Should the scraper wait for you to login? " "(y) yes, (n) no [default no]\n"
     )
 
     write_text = output_format == "txt" or output_format == "t"
