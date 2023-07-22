@@ -33,6 +33,8 @@ class Scraper:
         body = element.find_element(By.XPATH, "./*")
 
         epub_body = body.get_attribute("innerHTML")
+        epub_body = epub_body.replace("&nbsp;", "")
+
         text_bdoy = parse_body_to_text(body)
 
         return epub_body, text_bdoy
