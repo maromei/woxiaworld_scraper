@@ -7,6 +7,12 @@ import pypub
 from wuxiaworld_scraper.navigate import UrlInfo
 
 
+def fix_character_encoding(line: str) -> str:
+    # ignore many characters which f.e. epub will not display
+    # --> only ascii symbols
+    return line.encode("ascii", "ignore").decode("utf-8")
+
+
 def generate_text_content(title: str, body: list[dict]) -> str:
 
     formatted_title = title + "\n" + "-" * len(title)
@@ -18,7 +24,7 @@ def generate_text_content(title: str, body: list[dict]) -> str:
 
     for section in body:
 
-        section_list = [entry["text"] for entry in section]
+        section_list = [fix_character_encoding(entry["text"]) for entry in section]
         section_text = "".join(section_list)
         section_text = "\n".join(text_wrapper.wrap(section_text))
         sections.append(section_text)
@@ -35,8 +41,8 @@ def write_epub(title: str, content: dict, out_dir: Path | str):
 
     for _, content_dict in content.items():
 
-        chapter_title = content_dict["title"]
-        chapter_html = content_dict["body"]
+        chapter_title = fix_character_encoding(content_dict["title"])
+        chapter_html = fix_character_encoding(content_dict["body"])
 
         epub_chapter = pypub.Chapter(chapter_title, chapter_html.encode("utf-8"))
         epub.add_chapter(epub_chapter)
