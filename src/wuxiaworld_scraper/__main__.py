@@ -1,4 +1,5 @@
 import os
+import traceback
 from pathlib import Path
 
 from wuxiaworld_scraper import scraper, writer, navigate
@@ -32,7 +33,15 @@ if __name__ == "__main__":
     base_path = Path(os.getcwd()) / "output"
 
     if write_epub:
-        writer.write(epub_content, base_path, url_info, True)
+        try:
+            writer.write(epub_content, base_path, url_info, True)
+        except Exception as e:
+            print("Exception while trying to write epub:", str(e))
+            traceback.print_exc()
 
     if write_text:
-        writer.write(text_content, base_path, url_info, False)
+        try:
+            writer.write(text_content, base_path, url_info, False)
+        except Exception as e:
+            print("Exception while trying to write text file:", str(e))
+            traceback.print_exc()
