@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 from textwrap import TextWrapper
 
@@ -10,6 +11,7 @@ from wuxiaworld_scraper.navigate import UrlInfo
 def fix_character_encoding(line: str) -> str:
     # ignore many characters which f.e. epub will not display
     # --> only ascii symbols
+    line = re.sub("[\u201c\u201d]", '"', line)
     return line.encode("ascii", "ignore").decode("utf-8")
 
 
